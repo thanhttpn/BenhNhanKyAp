@@ -1,0 +1,14 @@
+.document-container {
+  position: relative; /* Đây là chìa khóa để định vị tuyệt đối */
+  margin: 20px auto;
+  width: fit-content;
+  border: 1px solid #ccc;
+}
+
+/* CSS cho component SignaturePadComponent đã được đặt trực tiếp trong file jsx (style inline) 
+   để dễ hình dung. Bạn có thể di chuyển nó ra đây để code sạch hơn. */
+
+.signature-result {
+  margin-top: 20px;
+  text-align: center;
+}
