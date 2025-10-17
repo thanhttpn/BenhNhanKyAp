@@ -1,35 +1,22 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useAuth } from '../context/AuthContext'; // <-- SỬ DỤNG CUSTOM HOOK
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const { login } = useAuth(); // <-- LẤY HÀM LOGIN TỪ CONTEXT
 
     const handleLogin = async (e) => {
-        e.preventDefault(); // Ngăn form submit và tải lại trang
-        setError(''); // Xóa lỗi cũ
+        e.preventDefault();
+        setError('');
 
         try {
-            const response = await axios.post('https://localhost:7229/api/auth/login', {
-                username: username,
-                password: password
-            });
-            
-            // Lấy token từ response
-            const token = response.data.token;
-            console.log('Đăng nhập thành công, nhận được token:', token);
-
-            // Lưu token vào localStorage để sử dụng cho các request sau
-            localStorage.setItem('authToken', token);
-
-            // Chuyển hướng đến trang chính hoặc làm gì đó sau khi đăng nhập thành công
-            alert('Đăng nhập thành công!');
-
-        } catch (err) {
-            console.error('Lỗi đăng nhập:', err.response);
+            // Chỉ cần gọi hàm login, mọi logic còn lại đã nằm trong context
+            await login(username, password);
+            // Không cần chuyển hướng, App component sẽ tự động làm điều đó
+        } catch {
             setError('Tài khoản hoặc mật khẩu không chính xác.');
-            alert('Đăng nhập thất bại!');
         }
     };
 
@@ -37,6 +24,7 @@ const LoginPage = () => {
         <div>
             <h2>Đăng nhập hệ thống</h2>
             <form onSubmit={handleLogin}>
+                {/* ... phần input username/password giữ nguyên ... */}
                 <div>
                     <label>Tài khoản:</label>
                     <input 
