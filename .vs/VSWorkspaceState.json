@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\components"
   ],
-  "SelectedNode": "\\D:\\.DK\\benh-nhan-ky-app",
+  "SelectedNode": "\\src\\components\\LoginPage.jsx",
   "PreviewInSolutionExplorer": false
 }

@@ -1,46 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import api from '../api/axiosConfig'; // <-- IMPORT INSTANCE MỚI CỦA CHÚNG TA
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext'; // <-- SỬ DỤNG CUSTOM HOOK
 
-const UserProfile = () => {
-    const [userData, setUserData] = useState(null);
+const LoginPage = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const { login } = useAuth(); // <-- LẤY HÀM LOGIN TỪ CONTEXT
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                // Gọi API bằng instance đã cấu hình
-                // Bạn không cần phải thêm token hay URL đầy đủ nữa
-                const response = await api.get('/NhanVien/profile');
-                setUserData(response.data);
-            } catch (err) {
-                console.error('Lỗi khi lấy thông tin người dùng:', err);
-                if (err.response && err.response.status === 401) {
-                     setError('Phiên đăng nhập đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.');
-                } else {
-                     setError('Không thể tải dữ liệu người dùng.');
-                }
-            }
-        };
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError('');
+        setIsLoading(true);
 
-        fetchProfile();
-    }, []); // Mảng rỗng đảm bảo useEffect chỉ chạy 1 lần
-
-    if (error) {
-        return <p style={{ color: 'red' }}>{error}</p>;
-    }
-
-    if (!userData) {
-        return <p>Đang tải thông tin...</p>;
-    }
+        try {
+            // Chỉ cần gọi hàm login, mọi logic còn lại đã nằm trong context
+            await login(username, password);
+            // Không cần làm gì thêm, App.jsx sẽ tự động chuyển trang
+        } catch (err) {
+            setError('Tài khoản hoặc mật khẩu không chính xác.');
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div>
-            <h2>Thông tin cá nhân</h2>
-            <p><strong>Mã nhân viên:</strong> {userData.maNV}</p>
-            <p><strong>Tên nhân viên:</strong> {userData.tenNhanVien}</p>
-            <p><strong>Tài khoản:</strong> {userData.username}</p>
+            <h2>Đăng nhập hệ thống</h2>
+            <form onSubmit={handleLogin}>
+                <div>
+                    <label>Tài khoản:</label>
+                    <input 
+                        type="text" 
+                        value={username} 
+                        onChange={(e) => setUsername(e.target.value)} 
+                        required 
+                    />
+                </div>
+                <div>
+                    <label>Mật khẩu:</label>
+                    <input 
+                        type="password" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        required 
+                    />
+                </div>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                </button>
+            </form>
         </div>
     );
 };
 
-export default UserProfile;
+export default LoginPage;

@@ -4,7 +4,7 @@ import axios from 'axios';
 const apiInstance = axios.create({
     // Cấu hình URL cơ sở cho tất cả các request
     // Mọi request dùng instance này sẽ tự động có tiền tố này
-    baseURL: 'https://localhost:7248/api' // <-- THAY BẰNG URL BACKEND CỦA BẠN
+    baseURL: 'https://localhost:7033/api' // <-- THAY BẰNG URL BACKEND CỦA BẠN
 });
 
 // Thêm một "interceptor" cho request
