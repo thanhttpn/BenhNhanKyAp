@@ -63,12 +63,20 @@ const PDFViewer = ({ pdfUrl, onLoadSuccess }) => {
                 }
 
             } catch (error) {
-                // Bỏ qua lỗi nếu do ta chủ động hủy (khi đóng dialog hoặc đổi file)
+                // 1. Bắt lỗi hủy Render (khi gọi .cancel())
                 if (error.name === 'RenderingCancelledException') {
-                    console.log('Render bị hủy do user thao tác.');
+                    // console.log('Render bị hủy.'); // Có thể comment lại cho đỡ rác console
                     return;
                 }
-                console.error('Lỗi tải/vẽ PDF:', error);
+                
+                // 2. Bắt lỗi hủy Worker (khi gọi .destroy() - ĐÂY LÀ LỖI BẠN ĐANG GẶP)
+                if (error.message && error.message.includes('Worker was destroyed')) {
+                    // console.log('Worker bị hủy do đóng dialog.'); // Đây là hành vi bình thường
+                    return;
+                }
+
+                // 3. Chỉ log ra những lỗi thực sự (ví dụ: file lỗi, sai đường dẫn, mạng rớt...)
+                console.error('Lỗi tải/vẽ PDF thực sự:', error);
             }
         };
 
