@@ -115,7 +115,7 @@ const ClinicalExamDialog = ({ open, onClose, patient, onSaveSuccess }) => {
                 setFormData({
                     maBenhAn: patient?.maBenhAn,
                     lan: lan,
-                    canNang: '', chieuCao: '', nhietDo: '', mach: '', 
+                    canNang: patient?.canNang, chieuCao: patient?.chieuCao, nhietDo: '', mach: '', 
                     huyetApThap: '', spO2: '', khamNhipTho: '',
                     khamToanThan: '', tim: '', phoi: '', bung: '', khac: '',
                     theoDoiGayMeHoiSuc: false,
